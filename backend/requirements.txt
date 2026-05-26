@@ -1,8 +1,8 @@
 fastapi
 uvicorn
 python-multipart
-moviepy
-opencv-python
+moviepy==1.0.3
+opencv-python-headless
 yt-dlp
 openai-whisper
 pydantic
