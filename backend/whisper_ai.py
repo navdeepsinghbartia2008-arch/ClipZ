@@ -1,27 +1,22 @@
 import whisper
 from moviepy.editor import VideoFileClip
 
-model = whisper.load_model("base")
+model = whisper.load_model("tiny")
 
 def transcribe_video(video_path):
     try:
         video = VideoFileClip(video_path)
 
-        # Check if audio exists
         if video.audio is None:
-            print("No audio found in video")
+            print("No audio found")
             return []
 
-        audio_path = "temp_audio.wav"
-
-        # Extract audio
+        audio_path = "uploads/temp_audio.wav"
         video.audio.write_audiofile(audio_path)
 
-        # Transcribe
         result = model.transcribe(audio_path)
-
         return result["segments"]
 
     except Exception as e:
-        print("Whisper Error:", e)
+        print("Whisper error:", e)
         return []
