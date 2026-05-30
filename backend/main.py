@@ -5,8 +5,6 @@ from pydantic import BaseModel
 import shutil
 import os
 
-from whisper_ai import transcribe_video
-from viral_detector import detect_viral_clips
 from clipper import create_clip
 from downloader import download_youtube_video
 
@@ -31,36 +29,21 @@ class YouTubeRequest(BaseModel):
 
 
 def generate_clips(video_path):
-    segments = transcribe_video(video_path)
-
-    if segments:
-        viral_clips = detect_viral_clips(segments)
-    else:
-        viral_clips = [
-            (0, 10),
-            (10, 20),
-            (20, 30),
-        ]
-
     clips = []
 
-    for index, (start, end) in enumerate(viral_clips):
-        caption = ""
+    timestamps = [
+        (0, 10),
+        (10, 20),
+        (20, 30)
+    ]
 
-        if segments and index < len(segments):
-            caption = segments[index]["text"]
-
-        output_path = create_clip(
-            video_path,
-            start,
-            end,
-            caption
-        )
+    for start, end in timestamps:
+        output_path = create_clip(video_path, start, end)
 
         filename = os.path.basename(output_path)
 
         clips.append({
-            "url": f"http://127.0.0.1:8000/outputs/{filename}"
+            "url": f"https://clipz-backend.onrender.com/outputs/{filename}"
         })
 
     return clips
