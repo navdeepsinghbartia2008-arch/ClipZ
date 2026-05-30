@@ -23,7 +23,7 @@ export default function Home() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/upload",
+        "https://clipz-backend.onrender.com",
         formData
       );
 
@@ -47,7 +47,7 @@ export default function Home() {
       setLoading(true);
 
       const response = await axios.post(
-        "http://127.0.0.1:8000/youtube",
+        "https://clipz-backend.onrender.com/Youtube",
         {
           url: youtubeUrl,
         }
