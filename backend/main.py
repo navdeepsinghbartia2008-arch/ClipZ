@@ -23,6 +23,8 @@ os.makedirs("outputs", exist_ok=True)
 
 app.mount("/outputs", StaticFiles(directory="outputs"), name="outputs")
 
+BASE_URL = "https://clipz-backend.onrender.com"
+
 
 class YouTubeRequest(BaseModel):
     url: str
@@ -34,7 +36,7 @@ def generate_clips(video_path):
     timestamps = [
         (0, 10),
         (10, 20),
-        (20, 30)
+        (20, 30),
     ]
 
     for start, end in timestamps:
@@ -43,10 +45,17 @@ def generate_clips(video_path):
         filename = os.path.basename(output_path)
 
         clips.append({
-            "url": f"https://clipz-backend.onrender.com/outputs/{filename}"
+            "url": f"{BASE_URL}/outputs/{filename}"
         })
 
     return clips
+
+
+@app.get("/")
+def home():
+    return {
+        "message": "ClipZ backend is running"
+    }
 
 
 @app.post("/upload")
@@ -65,7 +74,7 @@ async def upload_video(file: UploadFile = File(...)):
         }
 
     except Exception as e:
-        print("ERROR:", e)
+        print("UPLOAD ERROR:", e)
 
         return {
             "success": False,
